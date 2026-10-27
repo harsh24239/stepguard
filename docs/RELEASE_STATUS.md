@@ -55,6 +55,14 @@ or local passing test is not evidence that hosted CI has already run.
 Local browser evidence is in ignored `private_assets/release-verification/`.
 All authored fixture outcomes are separate from measured model performance.
 
+## Publication approval
+
+The complete source is committed locally. Public upload to
+`https://github.com/harsh24239/stepguard` has not been performed: it requires the
+user's explicit approval of that destination and public visibility. The CI
+workflow is ready, but hosted CI has not run because publication is pending.
+The source zip remains available locally regardless of publication.
+
 ## Remaining external/live gates
 
 1. Implement and verify the real Meta compiler, SAM localization/masks, judgment,
