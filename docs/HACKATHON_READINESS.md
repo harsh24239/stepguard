@@ -1,6 +1,6 @@
 # StepGuard hackathon readiness
 
-Reviewed October 27, 2026. **Not submission-ready.** The local prototype and Gemini demo adapter are implemented. Actual Meta runtime usage, physical-kit evidence, repository publication, and video submission are outstanding.
+Reviewed October 27, 2026. **Not submission-ready.** The local prototype and Gemini demo adapter are implemented. Actual Meta runtime usage, physical-kit evidence, and video submission are outstanding. The source is now public; see the repository link below.
 
 ## Official sources and deadline
 
@@ -14,7 +14,7 @@ Submission closes **November 4, 2026, 9:00 PM US Eastern Standard Time**, corres
 
 - **Theme fit: supported by the concept.** Manual-driven assembly checking fits the manufacturing theme. Final interpretation belongs to the organizers/judges.
 - **Meta model use: not met.** The guide requires incorporating Meta models, and first-stage screening checks meaningful Meta API and/or Meta open-weight usage. The current live provider is Gemini; Meta adapters still reject real calls. Writing code with Codex does not satisfy runtime Meta usage. No blanket prohibition on auxiliary providers was found in the rules reviewed, but Gemini alone cannot meet this requirement. The original project plan has a stricter Meta-only final-runtime goal; the user authorized Gemini temporarily for development.
-- **Public repository: not met.** A local Git repository and a genuine initial commit now exist. The complete source is committed locally. Public upload to `harsh24239/stepguard` requires explicit user approval; hosted CI and final public access remain unverified. Do not manufacture or backdate history. Exclude `.env`, private manuals/photos, sessions, build output, and dependencies.
+- **Public repository: published.** The reviewed source is available at [harsh24239/stepguard](https://github.com/harsh24239/stepguard), with genuine Git history and the prepared offline CI workflow. Do not manufacture or backdate history. Exclude `.env`, private manuals/photos, sessions, build output, and dependencies.
 - **Three-minute video: not met.** No recorded, accessible video has been supplied. Use the demo plan in `DEMO_SCRIPT.md` after real runs work. Show the actual provider, failures, correction, and locked-step behavior. Verify access to every submitted link while signed out.
 - **Accessible working product and code: partly met.** Source, setup instructions, tests, and a frontend build exist. A working app must be demonstrable to judges. Local execution plus video is the project baseline; this review did not find a separate mandatory cloud-deployment requirement. The built React application and API now run together locally using `python3 scripts/project.py run --build`; the same-origin workflow is tested. Public cloud hosting remains optional and is not configured.
 - **New work during the event: stated, evidence incomplete.** The workspace history states implementation began October 27 from the build prompt. Genuine local Git history begins with the current prototype snapshot; it does not retroactively establish earlier contribution dates. Identify event-period contributions clearly and show only eligible work in the demo.
@@ -51,4 +51,4 @@ The complete backend suite passes **177 tests** with fixture mode selected expli
 
 The published weights are impact 30%, Meta tooling 25%, technical depth 20%, and demo 25%. Show the practical assembly problem and a complete correction loop. Explain what each actual Meta model contributes once integrated. Include measured failures and uncertainty rather than unsupported accuracy claims. Browser speech, geometry, motion detection, and step locks are ordinary application code and should be described accurately.
 
-Credits must be claimed individually through the official process before the deadline, with any required billing setup handled by the participant. No credit claim, billing change, registration, repository publication, or final entry was submitted by this agent.
+Credits must be claimed individually through the official process before the deadline, with any required billing setup handled by the participant. Repository publication was explicitly approved by the user and completed. No credit claim, billing change, registration, or final entry was submitted by this agent.

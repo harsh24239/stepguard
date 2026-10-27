@@ -55,13 +55,16 @@ or local passing test is not evidence that hosted CI has already run.
 Local browser evidence is in ignored `private_assets/release-verification/`.
 All authored fixture outcomes are separate from measured model performance.
 
-## Publication approval
+## Public source
 
-The complete source is committed locally. Public upload to
-`https://github.com/harsh24239/stepguard` has not been performed: it requires the
-user's explicit approval of that destination and public visibility. The CI
-workflow is ready, but hosted CI has not run because publication is pending.
-The source zip remains available locally regardless of publication.
+The reviewed source is published at
+[harsh24239/stepguard](https://github.com/harsh24239/stepguard) on the `main` branch.
+Credentials, private assets, session audits, dependencies, and generated builds
+are excluded. Publication was explicitly authorized by the user.
+
+The [GitHub Actions workflow](https://github.com/harsh24239/stepguard/actions/workflows/checks.yml)
+runs the offline verification command. Check the workflow's current run for its
+hosted result; the local passing checks above do not stand in for hosted CI.
 
 ## Remaining external/live gates
 

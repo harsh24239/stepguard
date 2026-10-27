@@ -1,5 +1,7 @@
 # StepGuard
 
+[Public repository](https://github.com/harsh24239/stepguard) · [Offline release checks](https://github.com/harsh24239/stepguard/actions/workflows/checks.yml)
+
 StepGuard is a prototype for automatic assembly step checking, built for the Meta Global AI Developer Hackathon's manufacturing theme. The intended workflow is to upload an assembly manual, check a workbench image against each step, and keep the following step locked until the current one passes.
 
 **Current milestone: M6 — motion-stop and recorded voice triggers implemented.** Upload a PDF, review the extracted requirements, select **Start inspection**, explicitly enable the webcam, then use **Check step**, enable **Check when motion stops**, or hold **Hold to speak**. Every trigger checks the current server step through the same verification flow. The workspace shows the checklist, captured-frame overlays, feedback, browser speech, and audit log. Later steps stay locked until a server-confirmed pass or a reason-required manual override. All model calls remain fixture-backed in mock mode: the judge returns **unsure** and transcription returns **step done** regardless of the recorded speech. No real assembly has been inspected.
