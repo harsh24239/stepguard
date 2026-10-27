@@ -1,4 +1,4 @@
-import type { Checklist, Health, OverrideResult, Session, VerifyResult } from './types';
+import type { Checklist, Health, InspectionReport, OverrideResult, Session, VerifyResult } from './types';
 import { MAX_AUDIO_BYTES } from './voice';
 
 export class ApiError extends Error {
@@ -11,6 +11,8 @@ const sessionIdPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a
 const verdicts = ['pass', 'fail', 'unsure'];
 const statuses = ['LOCKED', 'ACTIVE', 'CHECKING', 'PASSED', 'FAILED', 'UNSURE'];
 const provider = (value: unknown) => value === undefined || value === 'meta' || value === 'gemini';
+const reportCounts = (value: Record<string, unknown>) => ['total_steps', 'automatic_passes', 'manual_overrides', 'completed_checks', 'check_errors']
+  .every(key => Number.isInteger(value[key]) && Number(value[key]) >= 0);
 
 function checklist(value: unknown): value is Checklist {
   return object(value) && typeof value.product === 'string' && Array.isArray(value.steps) && value.steps.length > 0 && value.steps.every(
@@ -98,6 +100,24 @@ export async function compileManual(file: File, signal?: AbortSignal): Promise<s
 export async function getSession(id: string, signal?: AbortSignal): Promise<Session> {
   const value = await validated(await request(`/session/${encodeURIComponent(id)}`, {}, signal), session);
   if (value.session_id !== id) throw new ApiError(502, 'The backend returned a different session. Upload the manual again.');
+  return value;
+}
+
+export async function createSampleSession(signal?: AbortSignal): Promise<Session> {
+  const value = await validated(await request('/sample-session', { method: 'POST' }, signal), session);
+  if (!value.mock_mode || value.reviewed_at !== null || value.complete || value.steps.some((step, i) => step.status !== (i === 0 ? 'ACTIVE' : 'LOCKED'))) {
+    throw new ApiError(502, 'The sample did not return a fresh development checklist.');
+  }
+  return value;
+}
+
+export async function getInspectionReport(id: string, signal?: AbortSignal): Promise<InspectionReport> {
+  const value = await validated(await request(`/session/${encodeURIComponent(id)}/report`, {}, signal), (value): value is InspectionReport =>
+    object(value) && value.format_version === 1 && typeof value.exported_at === 'string' && session(value.session) &&
+    value.session.session_id === id && value.evidence_label === (value.session.mock_mode ? 'development fixtures' : 'recorded provider outcomes') &&
+    Array.isArray(value.limitations) && value.limitations.every(item => typeof item === 'string') && object(value.summary) &&
+    reportCounts(value.summary) &&
+    value.summary.total_steps === value.session.steps.length && value.summary.complete === value.session.complete);
   return value;
 }
 

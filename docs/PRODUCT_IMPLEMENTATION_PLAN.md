@@ -128,12 +128,14 @@ Acceptance: actual Meta use is demonstrated; code and video are accessible; the 
 
 ## 7. Tests and completion checklist
 
+Software progress and current verification are recorded in [the offline release status](RELEASE_STATUS.md). Unchecked live/device/submission gates are intentionally not treated as completed software work.
+
 - [ ] Real Meta SAM gate passed on the chosen kit; compiler, judge, and demonstrated voice path verified.
-- [ ] New UI reviewed in browser at target sizes; instruction, result, and action remain readable/reachable.
+- [x] New UI reviewed in browser at target sizes; instruction, result, and action remain readable/reachable.
 - [ ] Keyboard, focus, contrast, zoom, and permissions/recovery checks completed.
-- [ ] Review/start and Continue behavior preserve server-controlled progression.
+- [x] Review/start and Continue behavior preserve server-controlled progression.
 - [ ] Correct three-step assembly, repeated full runs, error/correction loop, and uncertain case recorded honestly.
-- [ ] Backend/frontend regression suites and TypeScript/production build pass after changes.
+- [x] Backend/frontend regression suites and TypeScript/production build pass after changes.
 - [ ] Relevant browser/device tests run; synthetic tests clearly separated from real-device/model evidence.
 - [ ] Evaluation contains actual labeled-photo results, errors, false passes, and latency with limitations.
 - [ ] Public repository excludes keys, private assets, sessions, dependencies, and generated build output.

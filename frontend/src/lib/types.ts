@@ -66,3 +66,11 @@ export type OverrideResult = {
   next_step_unlocked: boolean;
 };
 export type CapturedFrame = { dataUrl: string; base64: string; width: number; height: number };
+export type InspectionReport = {
+  format_version: 1;
+  exported_at: string;
+  evidence_label: 'development fixtures' | 'recorded provider outcomes';
+  limitations: string[];
+  summary: { total_steps: number; automatic_passes: number; manual_overrides: number; completed_checks: number; check_errors: number; complete: boolean };
+  session: Session;
+};

@@ -10,9 +10,48 @@ StepGuard is a prototype for automatic assembly step checking, built for the Met
 
 **Operator workflow update (October 27):** The focused UI and server-enforced requirements review are implemented. A pass or manual override preserves its checked step until **Continue**; voice/motion cannot check the next step during that hold. History, step details, and optional triggers are collapsed by default. All live Meta and physical-kit gates remain pending. See [current validation and handoff](docs/NEXT_DAY_VALIDATION.md) and [verification record](docs/UI_VERIFICATION.md).
 
+**Design update:** The local prototype now uses the precision-workbench visual system, with PDF drag-and-drop, a custom assembly illustration, an in-app workflow guide, and a server-derived step map. See [design and verification notes](docs/DESIGN_UPDATE.md).
+
 **Active implementation scope:** follow the [hackathon implementation plan](docs/PRODUCT_IMPLEMENTATION_PLAN.md): verified Meta integration, a focused operator UI, lightweight checklist review, one validated physical kit, and submission evidence. Accounts, databases, team dashboards, and the wider product roadmap are deferred until after the event. The plan remains the scope reference; the workflow update above records the newly completed local work.
 
-## Run locally
+## Complete local release (no API key needed)
+
+Prerequisites: Python **3.12+**, Node.js **22.12+**, and npm. From the project root:
+
+```sh
+python3 scripts/project.py setup
+python3 scripts/project.py check
+python3 scripts/project.py run --build
+```
+
+Open **http://127.0.0.1:8000**. The built React application and FastAPI run from
+one origin; no Vite server is required. If port 8000 is already in use, add
+`--port 8001` to the run command. The local prototype is unauthenticated and
+binds to localhost by default. API documentation is at **/api/docs**.
+
+Setup preserves an existing `.env`. For an explicitly offline rehearsal, prefix
+the run command with `MOCK_MODE=true MODEL_PROVIDER=meta`. In mock mode, choose
+**Try the sample checklist** to start without a PDF or API request. Acknowledge
+that it is a development fixture before inspection. It never simulates an
+automatic pass; mock checks remain unsure.
+
+**Download report** exports the recorded checklist, review acknowledgment,
+provider/mode, check outcomes, errors, and override history as JSON. It excludes
+media and configured credentials. Mock fixtures and manual overrides stay labeled;
+workflow counts are not accuracy measurements. Do not publish reports containing
+manual text or operator reasons without reviewing their contents.
+
+Browser commands are converted locally to **mono 16-bit PCM WAV at 16 kHz** before
+transcription. Conversion uses browser decoding/downmixing/resampling; failures
+retain the button fallback. Real microphone and live transcription validation
+remain pending.
+
+The same offline verification command runs in `.github/workflows/checks.yml`.
+It checks dependencies, backend/frontend tests, production build, the built
+single-server workflow, and the source-package allowlist without paid model calls.
+See [release status](docs/RELEASE_STATUS.md) for completed work and remaining gates.
+
+## Run locally (development)
 
 Prerequisites: Python **3.12+** (tested with 3.12.5), Node.js **22.12+**, and npm. These commands assume macOS/Linux and run from the project root unless indicated. The pinned NumPy version requires Python 3.12 or newer.
 
@@ -40,7 +79,7 @@ Open **http://127.0.0.1:5173**. The page should show **Backend connected**, a vi
 
 Vite proxies `/api/*` to the local backend, removing the `/api` prefix. No broad CORS allowance is needed. The backend's interactive API documentation is at **http://127.0.0.1:8000/docs**.
 
-`npm run build` checks TypeScript and builds static assets. `npm run preview` previews those static assets only; use `npm run dev` for the connected local workspace. Production hosting and API routing are not configured yet.
+`npm run build` checks TypeScript and builds static assets. `npm run preview` previews those static assets only; use `npm run dev` for the connected local workspace. For the connected built release, use `python3 scripts/project.py run --build`; it serves the frontend and `/api` together. Public cloud hosting is not configured.
 
 ## Enable the Gemini demo
 
@@ -158,7 +197,7 @@ No server, API key, or camera is needed for this development check. Run from the
 .venv/bin/python -m scripts.inspect_fixture --output private_assets/m3-inspection.png
 ```
 
-The full suite now has **170 passing backend tests**, including the original 12 compiler tests and 36 geometry/inspector tests. The fixture command creates an original synthetic 640 × 480 workbench image, invokes the normal mock segmentation boundary, prints a `MOCK` summary, and optionally saves the annotated image at the requested path. Expect `found_counts` of one yellow plate and four black pins, `counts_match: true`, `rules_hold: true`, `uncertain: false`, and `deterministic_checks_pass: true`. This last field means deterministic evidence is consistent; it is not a judge verdict or an unlocked step. The segmentation fixture does not analyze the image's contents.
+The full suite now has **177 passing backend tests**, including the original 12 compiler tests and 36 geometry/inspector tests. The fixture command creates an original synthetic 640 × 480 workbench image, invokes the normal mock segmentation boundary, prints a `MOCK` summary, and optionally saves the annotated image at the requested path. Expect `found_counts` of one yellow plate and four black pins, `counts_match: true`, `rules_hold: true`, `uncertain: false`, and `deterministic_checks_pass: true`. This last field means deterministic evidence is consistent; it is not a judge verdict or an unlocked step. The segmentation fixture does not analyze the image's contents.
 
 The inspector follows these rules:
 
@@ -295,7 +334,7 @@ npm test
 npm run build
 ```
 
-The current suite, including M7 harness preparation and the Gemini adapter, has **166 backend tests** and **56 frontend tests**. The M6 production build passed TypeScript/Vite checks. The smoke flow transcribes original synthetic silence, confirms transcription alone does not change session state, performs the usual unsure check, verifies the next step returns **409**, then records a clearly identified manual override. Its output includes the labeled transcription and the audit path. It is a development transport/state check, not evidence of speech recognition or real assembly inspection.
+The current suite, including M7 harness preparation and the Gemini adapter, has **177 backend tests** and **73 frontend tests**. The M6 production build passed TypeScript/Vite checks. The smoke flow transcribes original synthetic silence, confirms transcription alone does not change session state, performs the usual unsure check, verifies the next step returns **409**, then records a clearly identified manual override. Its output includes the labeled transcription and the audit path. It is a development transport/state check, not evidence of speech recognition or real assembly inspection.
 
 The 28 new frontend tests cover motion timing, reset/cooldown, hidden-tab sampling, one-shot monitor cleanup, exact commands, microphone permission/release races, five-second stop, recording errors/cancellation/size limits, audio API validation, and control rendering. The 10 new backend tests cover audio transport, adapter output/errors, mode labeling, upload cleanup, and absence of session/audit changes. Browser media/timers are test doubles; actual camera/microphone permissions, pointer/keyboard events, audio encoding, speech playback, and visual layout still need the local walkthrough.
 
@@ -343,7 +382,7 @@ The 14 harness tests use original synthetic pixels and injected adapter response
 - `judge(step, found, geometry, annotated_image)`: Gemini returns structured verdict evidence; the existing judge guard enforces deterministic count and geometry failures. The future Meta role is Muse Spark. Mock mode remains unsure.
 - `transcribe(audio_bytes, mime)`: Gemini transcribes recorded audio, including empty text for silence. Browser MP4 recordings are submitted as `audio/m4a`. The future Meta role is Muse Voice Transcribe. Mock mode returns `step done`.
 
-The [official Meta overview](https://dev.meta.ai/docs/overview) and endpoint documentation have now been reviewed. Documented identifiers are `muse-wonder-1.0`, `muse-spark-1.3`, `sam-3.1`, and `muse-voice-transcribe-1.0`; the base is `https://api.meta.ai/v1` with bearer authentication. The adapters are still unimplemented and real Meta calls raise `NotImplementedError`; the UI shows **META · NOT READY**. See [remaining integration details](docs/HACKATHON_READINESS.md). Meta Voice requires supported PCM WAV, so current browser recordings need conversion. The optional open-weights identifier was confirmed in the participant guide but has not been integrated or run.
+The [official Meta overview](https://dev.meta.ai/docs/overview) and endpoint documentation have now been reviewed. Documented identifiers are `muse-wonder-1.0`, `muse-spark-1.3`, `sam-3.1`, and `muse-voice-transcribe-1.0`; the base is `https://api.meta.ai/v1` with bearer authentication. The adapters are still unimplemented and real Meta calls raise `NotImplementedError`; the UI shows **META · NOT READY**. See [remaining integration details](docs/HACKATHON_READINESS.md). Meta Voice requires supported PCM WAV. Local browser conversion to mono 16-bit PCM at 16 kHz is implemented; live Meta transcription validation is still pending. The optional open-weights identifier was confirmed in the participant guide but has not been integrated or run.
 
 Browser `SpeechSynthesis` provides spoken feedback with a mute toggle and once-per-result delivery. Step locking and motion detection run in application code regardless of the model provider. The Gemini demo does not count as completion of M7–M11 or real-kit acceptance testing.
 
@@ -392,7 +431,7 @@ This is an unfinished prototype. M6 adds motion and recorded voice triggers to t
 
 M1 verification in the agent environment passed in-process ASGI health/OpenAPI checks, all four fixture calls, mutable-fixture isolation, real-mode rejection of unimplemented adapters, dependency consistency (`pip check`), TypeScript checking, and the Vite production build. At M1, before the separately authorized Gemini addition, a scan found no other AI provider references. M6 passed the full 112-test backend suite, including compiler, inspector, judge, state, transcription, and HTTP workflow checks. The mock fixture command produced the expected counts and an annotated PNG. The in-process workflow check confirmed an unsure verdict, a blocked next step, and a separately logged development override. M6 also passed 53 frontend tests and the TypeScript/Vite production build; the extended smoke flow confirmed that transcription alone does not advance a session. Localhost server binding is denied in that environment; an isolated headless Chrome launch exited before opening a page. Interactive camera/microphone, motion calibration, audio encoding, speech, client event handling, and desktop/mobile visual verification must therefore be performed locally with the steps above. At that earlier checkpoint Git initialization and the first commit were pending. See the current verification record for the latest packaging status.
 
-The Gemini adapter has tests covering intercepted REST requests, header authentication, sanitized failures, structured output, PDF prompts, detection coordinates, audio, mock precedence, provider provenance, and the complete compile/check/session flow. The current complete suite passes 170 backend tests and 65 frontend tests, plus the TypeScript/Vite production build. Reliability and evaluation tests cover bounded retries, validation repair, cache isolation/expiry, check limits, honest failure accounting, and identical baseline/pipeline image pixels. HTTP interception verifies application behavior but cannot establish that a real key/model accepts the payloads. A minimal live connectivity request was attempted, but this environment could not reach Gemini; key validity, model availability, and quota are unconfirmed. This network failure is not evidence that the provided key is wrong. The saved key has been moved into `.env` and cleared from `.env.example`.
+The Gemini adapter has tests covering intercepted REST requests, header authentication, sanitized failures, structured output, PDF prompts, detection coordinates, audio, mock precedence, provider provenance, and the complete compile/check/session flow. The current complete suite passes 177 backend tests and 73 frontend tests, plus the TypeScript/Vite production build. Reliability and evaluation tests cover bounded retries, validation repair, cache isolation/expiry, check limits, honest failure accounting, and identical baseline/pipeline image pixels. HTTP interception verifies application behavior but cannot establish that a real key/model accepts the payloads. A minimal live connectivity request was attempted, but this environment could not reach Gemini; key validity, model availability, and quota are unconfirmed. This network failure is not evidence that the provided key is wrong. The saved key has been moved into `.env` and cleared from `.env.example`.
 
 ## Third-party libraries and licenses
 

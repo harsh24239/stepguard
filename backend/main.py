@@ -24,6 +24,7 @@ from backend.model_errors import ModelError
 from backend.runtime import CheckLimiter, observe_retries
 from backend.inspector import InvalidImageError, inspect_step
 from backend.judge import judge_step
+from backend.reporting import inspection_report
 from backend.schemas import (
     Checklist, OverrideRequest, OverrideResponse, SessionView, VerifyRequest, VerifyResponse,
 )
@@ -161,6 +162,26 @@ def get_session(session_id: UUID, response: Response) -> SessionView:
     session = app.state.session_store.get(str(session_id))
     _response_headers(response)
     return session
+
+
+@app.post("/sample-session", response_model=SessionView,
+          summary="Open the development checklist without an API call (mock mode only)")
+def sample_session(response: Response) -> SessionView:
+    if not MOCK_MODE or not meta_client.MOCK_MODE:
+        raise HTTPException(409, "The sample checklist is available only in mock mode.")
+    checklist = compile_checklist(b"%PDF-1.4 development fixture")
+    session = app.state.session_store.create(checklist, True, meta_client.MODEL_PROVIDER)
+    _response_headers(response)
+    return session
+
+
+@app.get("/session/{session_id}/report", summary="Download the recorded inspection workflow as JSON")
+def export_session(session_id: UUID) -> JSONResponse:
+    session = app.state.session_store.get(str(session_id))
+    response = JSONResponse(inspection_report(session))
+    _response_headers(response)
+    response.headers["Content-Disposition"] = f'attachment; filename="stepguard-{session_id}.json"'
+    return response
 
 
 @app.post("/session/{session_id}/review", response_model=SessionView,

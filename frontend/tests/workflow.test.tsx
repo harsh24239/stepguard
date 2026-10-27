@@ -67,6 +67,12 @@ test('review exposes counts, anchor, placement, and acknowledgment before Start'
   assert.match(html, /inside/); assert.match(html, /I reviewed every step/);
   assert.match(html, /button[^>]*disabled/); assert.doesNotMatch(html, /<textarea/);
 });
+test('mock review never claims requirements were extracted from a manual', () => {
+  const html = renderToStaticMarkup(<RequirementsReview checklist={checklist} mockMode disabled={false} busy={false} onStart={() => {}} />);
+  assert.match(html, /fixture steps/); assert.match(html, /not extracted from your PDF/);
+  assert.match(html, /I understand this is a development fixture/);
+  assert.doesNotMatch(html, /steps extracted/);
+});
 test('feedback holds pass evidence with disabled Continue until state is confirmed', () => {
   const html = renderToStaticMarkup(<FeedbackPanel result={result()} override={null} muted speechSupported
     canOverride={false} busy={false} awaitingContinue canContinue={false} onContinue={() => {}} onMute={() => {}} onOverride={async () => false} />);

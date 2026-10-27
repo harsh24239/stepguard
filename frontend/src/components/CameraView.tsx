@@ -137,7 +137,7 @@ const CameraView = forwardRef<CameraHandle, Props>(function CameraView(props, re
         {props.checking ? <span className="spinner" /> : <Icon name="check" />} {props.checking ? 'Checking…' : `Check step${props.activeStepId ? ` ${props.activeStepId}` : ''}`}
       </button>}
     </div>
-    <div className="camera-stage">
+    <div className={`camera-stage ${props.checking ? 'is-checking' : ''}`}>
       <video ref={video} autoPlay muted playsInline className={live && !props.frame ? 'visible' : ''}
         aria-label="Live workbench camera" onLoadedData={() => {
           if (stream.current && mounted.current) { setStatus('ready'); props.onReady(true); }

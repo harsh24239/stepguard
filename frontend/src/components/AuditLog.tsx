@@ -3,7 +3,7 @@ import type { AuditEntry } from '../lib/types';
 function describe(entry: AuditEntry): string {
   const step = entry.step_id ? `Step ${entry.step_id}` : 'Session';
   if (entry.event === 'session_created') return 'Assembly session started';
-  if (entry.event === 'requirements_reviewed') return 'Extracted requirements reviewed';
+  if (entry.event === 'requirements_reviewed') return 'Checklist review acknowledged';
   if (entry.event === 'step_activated') return `${step} activated`;
   if (entry.event === 'check_started') return `${step} check started`;
   if (entry.event === 'check_error') return `${step} check could not complete`;

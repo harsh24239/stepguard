@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Icon from './Icon';
 import type { Checklist, Step } from '../lib/types';
 
 export function StepRequirements({ step }: { step: Step }) {
@@ -10,20 +11,20 @@ export function StepRequirements({ step }: { step: Step }) {
   </div>;
 }
 
-export default function RequirementsReview({ checklist, busy, disabled, onStart }: {
-  checklist: Checklist; busy: boolean; disabled: boolean; onStart: () => void;
+export default function RequirementsReview({ checklist, busy, disabled, onStart, mockMode = false }: {
+  checklist: Checklist; busy: boolean; disabled: boolean; onStart: () => void; mockMode?: boolean;
 }) {
   const [acknowledged, setAcknowledged] = useState(false);
   return <section className="panel review-panel" aria-labelledby="review-title">
-    <div className="review-intro"><span className="eyebrow">02 / REVIEW REQUIREMENTS</span><h2 id="review-title">Check the checklist against your manual.</h2>
-      <p>Confirm the instructions, part counts, reference anchors, and placement requirements. If anything is wrong, correct the manual or compiler and upload again before starting.</p>
+    <div className="review-intro"><div className="review-topline"><span className="review-icon"><Icon name="layers" size={22}/></span><span className="review-ready">{checklist.steps.length} {mockMode ? 'fixture steps' : 'steps extracted'} · awaiting review</span></div><span className="eyebrow">02 / REVIEW REQUIREMENTS</span><h2 id="review-title">{mockMode ? 'Explore the development checklist.' : 'Check the checklist against your manual.'}</h2>
+      <p>{mockMode ? 'These authored instructions let you rehearse the workflow. They were not extracted from your PDF, and checking them does not inspect a real assembly.' : 'Confirm the instructions, part counts, reference anchors, and placement requirements. If anything is wrong, correct the manual or compiler and upload again before starting.'}</p>
       <p className="supporting">Visual checks cannot establish torque, tightness, or other hidden properties. These require human review. Acknowledging this checklist does not prove the model extracted it correctly.</p>
     </div>
     <ol className="review-steps">{checklist.steps.map(step => <li key={step.step_id}>
       <div className="review-step-heading"><span className="step-number">{step.step_id}</span><h3>{step.instruction}</h3></div>
       <StepRequirements step={step} />
     </li>)}</ol>
-    <div className="review-start"><label className="checkbox-label"><input type="checkbox" checked={acknowledged} onChange={event => setAcknowledged(event.target.checked)} disabled={busy} />I reviewed every step against the manual.</label>
+    <div className="review-start"><label className="checkbox-label"><input type="checkbox" checked={acknowledged} onChange={event => setAcknowledged(event.target.checked)} disabled={busy} />{mockMode ? 'I understand this is a development fixture.' : 'I reviewed every step against the manual.'}</label>
       <button className="button primary" disabled={!acknowledged || disabled || busy} onClick={onStart}>{busy ? 'Starting…' : 'Start inspection'}</button>
       <p className="supporting">Camera and inspection controls become available after the server saves this acknowledgment.</p>
     </div>

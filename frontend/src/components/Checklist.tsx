@@ -9,6 +9,7 @@ export default function Checklist({ session, checkingStep, presentedStepId }: { 
       <div className="checklist-product"><span className="eyebrow">{session.mock_mode ? 'DEVELOPMENT CHECKLIST' : session.provider === 'gemini' ? 'GEMINI DEMO CHECKLIST' : 'ASSEMBLY'}</span><h3>{session.checklist.product}</h3>
         <div className="progress-track" role="progressbar" aria-label="Steps passed" aria-valuemin={0} aria-valuemax={session.steps.length} aria-valuenow={passed}><span style={{ width: `${passed / session.steps.length * 100}%` }} /></div>
       </div>
+      <div className="step-map" role="list" aria-label="Step progress map">{session.steps.map(step => <span key={step.step_id} role="listitem" className={`step-map-item map-${step.status.toLowerCase()} ${step.passed_via === 'override' ? 'map-override' : ''}`} title={`Step ${step.step_id}: ${step.passed_via === 'override' ? 'manually overridden' : step.status.toLowerCase()}`} aria-label={`Step ${step.step_id}: ${step.passed_via === 'override' ? 'manually overridden' : step.status.toLowerCase()}`}>{step.status === 'PASSED' ? <Icon name="check" size={12}/> : step.step_id}</span>)}</div>
       <details className="step-navigation"><summary>View all {session.steps.length} steps</summary><ol className="checklist">
         {session.checklist.steps.map((step, index) => {
           const state = session.steps[index];

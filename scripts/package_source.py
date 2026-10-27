@@ -8,10 +8,10 @@ import re
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-DIRECTORIES = {"backend", "frontend", "docs", "eval", "scripts"}
+DIRECTORIES = {"backend", "frontend", "docs", "eval", "scripts", ".github"}
 ROOT_FILES = {"README.md", "STEPGUARD_COMPLETE_PROMPT.md", ".gitignore", ".env.example", "private_assets/.gitkeep", "sessions/.gitkeep"}
 EXCLUDED = {".git", ".venv", "node_modules", "dist", "__pycache__", ".pytest_cache", ".ruff_cache"}
-SUFFIXES = {".py", ".ts", ".tsx", ".css", ".html", ".json", ".md", ".txt", ".lock", ".mjs"}
+SUFFIXES = {".py", ".ts", ".tsx", ".css", ".html", ".json", ".md", ".txt", ".lock", ".mjs", ".svg", ".yml", ".yaml"}
 # This is a basic accidental-key check, not a substitute for participant review.
 KEY = re.compile(r"AIza[0-9A-Za-z_-]{30,}|\bsk-[0-9A-Za-z_-]{20,}|\bgh[pousr]_[0-9A-Za-z]{20,}")
 

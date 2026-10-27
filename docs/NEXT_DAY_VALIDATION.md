@@ -6,6 +6,8 @@ its adapters have been implemented and tested.
 
 ## Ready locally
 
+See [offline release status](RELEASE_STATUS.md) for the completed non-provider implementation, single-server runner, sample mode, report export, WAV conversion, CI, and latest test evidence.
+
 - Upload → read-only requirements review → server-saved Start inspection.
 - Focused current instruction, expected counts, anchor, spatial requirements,
   camera/check action, and adjacent feedback.
