@@ -29,9 +29,11 @@ is excluded from this release.
 - Evaluation tooling, model responsibilities, limitations, demo recording plan,
   next-day validation order, and dependency license inventory.
 
+The approved Workbench visual revision is recorded in [design notes](DESIGN_UPDATE.md).
+
 ## Verified locally
 
-- **177 backend tests and 73 frontend tests passed** (250 total).
+- **177 backend tests and 76 frontend tests passed** (253 total).
 - TypeScript, production build, and the development visual fixture's type check passed.
 - `python3 scripts/project.py check` passed: dependencies, suites, built release
   routing, sample/review/report smoke flow, and source-package validation.

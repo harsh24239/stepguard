@@ -4,7 +4,7 @@ import type { Checklist, Step } from '../lib/types';
 
 export function StepRequirements({ step }: { step: Step }) {
   return <div className="requirements">
-    <div><span className="field-label">Expected parts</span><ul className="part-chips">{Object.entries(step.expected_counts).map(([part, count]) => <li key={part}><strong>{count} ×</strong> {part}</li>)}</ul></div>
+    <div><span className="field-label">Expected parts</span><ul className="parts-list">{Object.entries(step.expected_counts).map(([part, count]) => <li key={part}><span>{part}</span><strong>× {count}</strong></li>)}</ul></div>
     <div className="requirement-details"><p><strong>Reference anchor:</strong> {step.zone_anchor}</p>
       {step.spatial_rules.length ? <ul>{step.spatial_rules.map((rule, index) => <li key={index}>{rule.part} · {rule.relation.replaceAll('_', ' ')} · {rule.target}</li>)}</ul> : <p>No spatial requirement was extracted for this step.</p>}
     </div>

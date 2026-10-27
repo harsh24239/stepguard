@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import type { OverrideResult, VerifyResult } from '../lib/types';
 import Icon from './Icon';
 
@@ -18,6 +18,8 @@ type Props = {
   canContinue?: boolean;
   onContinue?: () => void;
   complete?: boolean;
+  action?: ReactNode;
+  actionHint?: string;
 };
 
 export default function FeedbackPanel(props: Props) {
@@ -25,7 +27,7 @@ export default function FeedbackPanel(props: Props) {
   const [overrideOpen, setOverrideOpen] = useState(false);
   const panel = useRef<HTMLElement>(null);
   useEffect(() => {
-    if (!props.checkingStep && (props.result || props.override) && window.matchMedia('(max-width: 800px)').matches) {
+    if (!props.checkingStep && (props.result || props.override)) {
       panel.current?.scrollIntoView({ block: 'nearest' });
     }
   }, [props.result, props.override, props.checkingStep]);
@@ -55,9 +57,9 @@ export default function FeedbackPanel(props: Props) {
         <div className="result-meta"><span>Checked in {(result.latency_ms / 1000).toFixed(result.latency_ms < 1000 ? 2 : 1)} s</span><span>{result.next_step_unlocked ? 'Next step unlocked' : result.verdict === 'pass' ? 'Final step passed' : 'Next step locked'}</span></div>
       </> : !props.complete && <p className="feedback-muted">A pass unlocks the next step. An unsure result keeps it locked.</p>)}
     </div>
-    {props.awaitingContinue && <div className="continue-controls"><button className="button primary" disabled={!props.canContinue} onClick={props.onContinue}>{props.complete ? 'Finish inspection' : 'Continue to next step'}<Icon name="arrow" /></button>
+    {props.awaitingContinue ? <div className="continue-controls"><span className="action-hint"><Icon name="check" size={15}/>{props.complete ? 'Final step recorded' : 'Next step unlocked · review before continuing'}</span><button className="button primary" disabled={!props.canContinue} onClick={props.onContinue}>{props.complete ? 'Finish inspection' : 'Continue to next step'}<Icon name="arrow" /></button>
       {!props.canContinue && <p>Wait for the current action to finish. If session refresh failed, refresh the session to confirm progression.</p>}
-    </div>}
+    </div> : props.action && <div className="continue-controls"><span className="action-hint"><Icon name="lock" size={15}/>{props.actionHint}</span>{props.action}</div>}
     {!props.speechSupported && <p className="speech-note">Speech is unavailable in this browser. Written feedback is always shown.</p>}
     {props.currentStepId !== undefined && <details className="override-details" open={overrideOpen} onToggle={event => setOverrideOpen(event.currentTarget.open)}>
       <summary>Manual override <span>Reason required</span></summary>

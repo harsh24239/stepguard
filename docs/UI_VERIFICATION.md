@@ -4,7 +4,15 @@ The focused UI and interaction hardening have been implemented locally. This
 record describes application verification only. Meta integration, live model
 accuracy, physical-kit runs, and real camera/microphone checks remain pending.
 
-## Implemented
+## Latest visual revision
+
+The approved Workbench layout supersedes the light theme and desktop arrangement
+in the original verification below. Requirements now sit in the left work order;
+feedback and the primary action follow the camera at every width. See
+[the current design and verification record](DESIGN_UPDATE.md). The current
+suite has 177 backend and 76 frontend tests (253 total).
+
+## Original workflow implementation
 
 - Separate upload, requirements review, and inspection screens.
 - Read-only instructions, counts, anchors, and placement requirements before

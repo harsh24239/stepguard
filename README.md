@@ -12,7 +12,7 @@ StepGuard is a prototype for automatic assembly step checking, built for the Met
 
 **Operator workflow update (October 27):** The focused UI and server-enforced requirements review are implemented. A pass or manual override preserves its checked step until **Continue**; voice/motion cannot check the next step during that hold. History, step details, and optional triggers are collapsed by default. All live Meta and physical-kit gates remain pending. See [current validation and handoff](docs/NEXT_DAY_VALIDATION.md) and [verification record](docs/UI_VERIFICATION.md).
 
-**Design update:** The local prototype now uses the precision-workbench visual system, with PDF drag-and-drop, a custom assembly illustration, an in-app workflow guide, and a server-derived step map. See [design and verification notes](docs/DESIGN_UPDATE.md).
+**Design update:** The approved Workbench direction is implemented: olive and copper surfaces, a procedure sheet, a compact work order, and a large camera view with feedback and the primary action below it. Counts distinguish unknown evidence from zero. The server review and Continue gates remain in place. See [design and verification notes](docs/DESIGN_UPDATE.md).
 
 **Active implementation scope:** follow the [hackathon implementation plan](docs/PRODUCT_IMPLEMENTATION_PLAN.md): verified Meta integration, a focused operator UI, lightweight checklist review, one validated physical kit, and submission evidence. Accounts, databases, team dashboards, and the wider product roadmap are deferred until after the event. The plan remains the scope reference; the workflow update above records the newly completed local work.
 

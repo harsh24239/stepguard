@@ -1,51 +1,52 @@
-# Precision workbench design update
+# Workbench design update
 
-Implemented October 27, 2026 for the existing local React/FastAPI prototype.
+Implemented October 27, 2026 in the existing local React/FastAPI application.
+This replaces the earlier navy/cobalt sidebar design with the approved Workbench
+direction: olive surfaces, copper actions, structural rules, serif work-order
+titles and step numbers, and a compact horizontal header. Fonts are local system
+fonts; no external assets or new dependencies are needed.
 
-The direction uses a dark navy navigation rail, a cobalt action color, white
-operator surfaces, and a custom isometric assembly illustration. The setup screen
-introduces the procedure, while the running workspace gives priority to the
-current instruction, captured evidence, and next action. No external image/font
-service or new frontend dependency was added.
+## Operator experience
 
-## What changed
+- A functional procedure-loading sheet with PDF drag-and-drop, sample onboarding,
+  and the three-stage Load / Review / Inspect indicator.
+- A requirements review sheet with the existing server-saved acknowledgment gate.
+- A narrow work order containing product, server progress, nearby steps, actual
+  part quantities, reference anchor, and placement rules. Phone layouts show the
+  presented step and offer all instructions in a disclosure.
+- A large evidence area with opt-in camera controls, the actual captured image,
+  frame/step/attempt labels, count summaries, and written overlay descriptions.
+  Unknown counts use an em dash, separately from a detected zero. Unsure counts
+  remain explicitly unverified.
+- Feedback and a single primary check/retry/Continue action beneath the evidence.
+  Results scroll into reach after completion. The checked instruction remains
+  presented until Continue, even when the server has unlocked the next step.
+- Manual override, motion/voice controls, and audit history remain available in
+  subordinate disclosures. Overrides retain their reason and separate provenance.
+- A native workflow dialog, visible keyboard focus, reduced-motion support, and
+  the existing report/download and recovery paths.
 
-- Responsive navigation with a workspace anchor, a workflow guide, and contextual
-  session history. The brand link preserves the running session.
-- A split setup layout with original SVG artwork, PDF drag-and-drop, the existing
-  file chooser, and a clear three-stage upload/review/inspection indicator.
-- A native modal guide with keyboard dismissal and correct mock-mode limitations.
-- Updated checklist review, reference/count chips, camera standby framing,
-  result panels, status colors, and a compact map of actual server step statuses.
-- An original shield favicon, restrained interaction transitions, and a checking
-  indicator shown only during an actual pending check. Reduced motion is honored.
-- Readable main instruction/result text, keyboard focus, and mobile navigation
-  controls with explicit accessible names.
-
-The review acknowledgment, server step locks, pass/override Continue hold,
-provider disclosures, manual override provenance, and conservative uncertainty
-behavior remain in place. The illustration is labeled as an illustration and
-is never used as live inspection evidence.
+There is no illustration posing as a camera feed. Mock mode remains explicit:
+manuals, frames, and speech are not analyzed, and automatic checks return unsure.
+Real Meta adapters, model accuracy, physical-kit checks, and real device testing
+remain pending.
 
 ## Verification
 
-- 170 backend tests and 65 frontend tests passed; TypeScript and production build
-  passed. The visual fixture also passed a separate TypeScript check.
-- Browser verified: guide opens and Escape closes it; actual synthetic PDF upload
-  reaches review; Start remains disabled before acknowledgment; acknowledgment
-  opens inspection; session-history navigation opens the audit without changing
-  the active task.
-- Setup inspected at 1280, 768, and 390 CSS px without horizontal overflow.
-- Nine synthetic result states with long instructions and 50 steps inspected at
-  all three target widths: 27 scenarios, none with horizontal document overflow.
-- Screenshots and the responsive log are retained in ignored
-  `private_assets/design-v2/`. These are application checks, not real-model or
-  physical-kit validation. Real camera/microphone and Meta gates remain pending.
+- `python3 scripts/project.py check`: 177 backend and 76 frontend tests passed
+  (253 total), dependency check, TypeScript/production build, fixture typecheck,
+  built release smoke flow, and source allowlist passed.
+- Added regression coverage for unknown versus zero counts, avoiding duplicate
+  camera check actions, and distinguishing a held step from the unlocked next step.
+- Actual built application: sample onboarding, fixture acknowledgment, recorded
+  test-only override, held instruction, and Continue to step 2 verified in browser.
+  No physical assembly or live model result was claimed.
+- Nine synthetic states checked at 1280, 768, 390, and 320 CSS px, both ordinary
+  and 50-step/long-instruction procedures. No horizontal document overflow.
+- Desktop and phone layouts visually inspected; browser console had no errors.
+  Screenshots and layout logs are stored in ignored
+  `private_assets/workbench-verification/`. Synthetic fixtures are development-only
+  and excluded from the production entry.
 
-The updated source bundle can be reproduced with:
-
-```sh
-.venv/bin/python -m scripts.package_source --output private_assets/stepguard-design-source.zip
-```
-
-Existing bundles are preserved; choose a new output filename for later revisions.
+Run the existing release with `python3 scripts/project.py run --build --port 8001`.
+The local preview is at http://127.0.0.1:8001/.

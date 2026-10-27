@@ -245,3 +245,28 @@ test('review endpoint requires a matching session with a saved acknowledgment', 
   await assert.rejects(api.reviewSession(id), /Review could not be confirmed/);
   reply({ ...snapshot(), reviewed_at: true }); await assert.rejects(api.getSession(id), /unexpected response/);
 });
+
+test('unestablished counts are distinct from a detected zero', () => {
+  const result = { ...checked('unsure'), expected_counts: { 'yellow plate': 1, 'black pin': 4 }, found_counts: { 'yellow plate': 0 } };
+  const html = renderToStaticMarkup(<CameraView frame={null} result={result} complete={false} checking={false} disabled canCheck={false} onReady={() => {}} onCheck={() => {}} onResume={() => {}} />);
+  assert.match(html, /yellow plate: expected 1, detected 0/);
+  assert.match(html, /black pin: expected 4, detected not established/);
+  assert.match(html, /Counts are unverified/);
+  assert.doesNotMatch(html, /black pin: expected 4, detected 0/);
+});
+
+test('external camera action does not create a duplicate check button', () => {
+  const html = renderToStaticMarkup(<CameraView showAction={false} frame={null} result={null} complete={false} checking={false} disabled canCheck={false} onReady={() => {}} onCheck={() => {}} onResume={() => {}} />);
+  assert.match(html, /Enable camera/);
+  assert.doesNotMatch(html, />Check step/);
+});
+
+test('the work order distinguishes a held result from the next unlocked step', () => {
+  const session = snapshot();
+  session.steps[0].status = 'PASSED';
+  session.steps[1].status = 'ACTIVE';
+  const html = renderToStaticMarkup(<Checklist session={session} presentedStepId={1}/>);
+  assert.match(html, /state-passed[^>]*aria-current="step"/);
+  assert.match(html, /UNLOCKED/);
+  assert.doesNotMatch(html, /CURRENT/);
+});
