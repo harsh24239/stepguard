@@ -1,0 +1,13 @@
+{
+  "verdict": "unsure",
+  "confidence": 0.0,
+  "issues": [
+    {
+      "type": "low_confidence",
+      "part": "assembly",
+      "location_hint": "workbench",
+      "message": "Development fixture only; no camera image has been inspected."
+    }
+  ],
+  "fix_hint": "This mock response does not verify an assembly."
+}

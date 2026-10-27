@@ -1,0 +1,23 @@
+{
+  "product": "Development fixture: plate and pins",
+  "steps": [
+    {
+      "step_id": 1,
+      "instruction": "Place the yellow plate on the workbench.",
+      "sam_prompts": ["yellow plate"],
+      "expected_counts": {"yellow plate": 1},
+      "zone_anchor": "yellow plate",
+      "spatial_rules": [],
+      "fix_hint_template": "Place the yellow plate flat inside the camera view."
+    },
+    {
+      "step_id": 2,
+      "instruction": "Place four black pins inside the yellow plate.",
+      "sam_prompts": ["yellow plate", "black pin"],
+      "expected_counts": {"yellow plate": 1, "black pin": 4},
+      "zone_anchor": "yellow plate",
+      "spatial_rules": [{"part": "black pin", "relation": "inside", "target": "yellow plate"}],
+      "fix_hint_template": "Place the four black pins into the holes on the yellow plate."
+    }
+  ]
+}

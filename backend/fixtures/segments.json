@@ -1,0 +1,11 @@
+{
+  "yellow plate": [
+    {"label": "yellow plate", "box": [80, 60, 560, 420], "score": 0.98, "mask_png_base64": ""}
+  ],
+  "black pin": [
+    {"label": "black pin", "box": [120, 100, 140, 120], "score": 0.95, "mask_png_base64": ""},
+    {"label": "black pin", "box": [500, 100, 520, 120], "score": 0.96, "mask_png_base64": ""},
+    {"label": "black pin", "box": [120, 360, 140, 380], "score": 0.94, "mask_png_base64": ""},
+    {"label": "black pin", "box": [500, 360, 520, 380], "score": 0.95, "mask_png_base64": ""}
+  ]
+}
